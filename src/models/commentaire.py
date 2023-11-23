@@ -1,13 +1,12 @@
-from base import Base
+from .base import Base
 from sqlalchemy import ForeignKey, String, Date
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column, relationship
-from ouvrage import Ouvrage
 
 
 class Commentaire(Base):
     __tablename__ = "commentaire"
-    
+
     id_commentaire: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     date_publication_commentaire: Mapped[Date] = mapped_column(Date())
     auteur_commentaire: Mapped[str] = mapped_column(String(255))
