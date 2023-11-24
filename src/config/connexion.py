@@ -12,3 +12,11 @@ host = "localhost"
 database = "librairie"
 
 ENGINE = create_engine(f"{connector}://{user}:{password}@{host}/{database}")
+
+
+async def get_db() -> Session:
+    session = Session(ENGINE)
+    try:
+        yield session
+    finally:
+        session.close()
