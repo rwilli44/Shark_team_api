@@ -7,12 +7,18 @@ from models.commentaire import Commentaire
 from models.ouvrage import Ouvrage
 from models.theme_ouvrage import ThemeOuvrage
 from models.theme import Theme
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 app = FastAPI()
 
 connector = "mysql+pymysql"
-user = "root"
-password = "167943"
+user = os.getenv("DATABASE_USERNAME")
+password = os.getenv("DATABASE_PASSWORD")
 host = "localhost"
 database = "librairie"
 
