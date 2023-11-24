@@ -17,26 +17,27 @@ class Ouvrage_schema(BaseModel):
     prix_ouvrage: float
     date_parution_ouvrage: date | None = None
     categorie_ouvrage: str
-    date_disponibilite_libraire_ouvrage: date 
+    date_disponibilite_libraire_ouvrage: date
     date_disponibilite_particulier_ouvrage: date
     image_ouvrage: str | None = None
     table_des_matieres_ouvrage: str | None = None
     mot_cle_ouvrage: str | None = None
     description_ouvrage: str | None = None
     commentaires: list = []
-    
+
     # Permet de passer facilement du modèle au schéma
     class Config:
         orm_mode = True
         from_attributes = True
 
 
-@router.get("/ouvrages/{id_ouvrage}")
+@router.get("/ouvrages/{id_ouvrage}", tags=["ouvrage"])
 async def get_ouvrage(id_ouvrage: int, ouvrage: Ouvrage_schema):
     results = {"id_ouvrage": id_ouvrage, "ouvrage": ouvrage}
     return results
 
-@router.post("/ouvrage/", response_model= Ouvrage_schema)
+
+@router.post("/ouvrage/", response_model=Ouvrage_schema, tags=["ouvrage"])
 async def create_ouvrage(ouvrage: Ouvrage_schema):
     with Session(ENGINE) as session:
         ouvrage_model = Ouvrage(**ouvrage.dict())
@@ -44,12 +45,11 @@ async def create_ouvrage(ouvrage: Ouvrage_schema):
         session.commit()
         return Ouvrage_schema.from_orm(ouvrage_model)
 
-@router.patch("/ouvrage/{id_ouvrage}")
+
+@router.patch("/ouvrage/{id_ouvrage}", tags=["ouvrage"])
 async def get_ouvrage(id_ouvrage: int, ouvrage: Ouvrage_schema):
     results = {"id_ouvrage": id_ouvrage, "ouvrage": ouvrage}
     return results
-
-
 
 
 """ @router.post(

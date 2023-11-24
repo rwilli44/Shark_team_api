@@ -8,3 +8,7 @@ class Commentaire_schema(BaseModel):
     titre_commentaire: str
     id_client: int
     id_ouvrage: int
+
+    class Config:
+        orm_mode = True
+        from_attributes = True

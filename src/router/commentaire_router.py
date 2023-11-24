@@ -9,23 +9,30 @@ from datetime import datetime
 
 router = APIRouter()
 
+############## GET AND POST OK: delete et patch à faire + tests
 
-@router.get("/commentaires/{id_commentaire}", tags=["commentaires"])
-async def read_comment(id_commentaire: int):
+
+@router.get(
+    "/commentaires/{id_comment}",
+    response_model=Commentaire_schema,
+    tags=["commentaires"],
+)
+async def read_comment(id_comment: int):
     with Session(ENGINE) as session:
-        stmt = select(Commentaire).where(Commentaire.id_commentaire == id_commentaire)
-        result = session.execute(stmt)
-        return result
+        stmt = select(Commentaire).where(Commentaire.id_commentaire == id_comment)
+        result = session.scalars(stmt).one()
+        return Commentaire_schema.from_orm(result)
 
 
-@router.put("/commentaires/add", tags=["commentaires"])
+@router.post(
+    "/commentaires/add", response_model=Commentaire_schema, tags=["commentaires"]
+)
 async def add_comment(commentaire: Commentaire_schema):
     with Session(ENGINE) as session:
-        new_commentaire = Commentaire(**commentaire.dict())
-
+        new_commentaire = Commentaire(**commentaire.module_dump())
         session.add_all([new_commentaire])
         session.commit()
-        return {"commentaire ajouté": new_commentaire}
+        return Commentaire_schema.from_orm(new_commentaire)
 
 
 #  date_publication_commentaire: Mapped[Date] = mapped_column(Date())
