@@ -7,31 +7,10 @@ from models.commentaire import Commentaire
 from models.ouvrage import Ouvrage
 from models.theme_ouvrage import ThemeOuvrage
 from models.theme import Theme
-import os
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
+from config.connexion import ENGINE
+from router import client_router
 
 app = FastAPI()
+app.include_router(client_router.router)
 
-connector = "mysql+pymysql"
-user = os.getenv("DATABASE_USERNAME")
-password = os.getenv("DATABASE_PASSWORD")
-host = "localhost"
-database = "librairie"
-
-engine = create_engine(f"{connector}://{user}:{password}@{host}/{database}")
-
-Base.metadata.create_all(engine)
-
-
-#creation d'une route pour remplire la Bdd table client
-@app.get("/remplissage/{nom}&{prenom}&{email}&{telephone}&{preferences}&{adresse_livraison}&{adresse_facturation}")
-async def ajout_client(nom: str, prenom : str,email : str,telephone : str,preferences : str, adresse_livraison : str, adresse_facturation : str):
-    with Session(engine) as session:
-        personne = Client(nom_client=nom, prenom_client=prenom, email_client=email, telephone_client=telephone, preferences_client =preferences,adresse_livraison_client=adresse_livraison, adresse_facturation_client=adresse_facturation)
-        session.add_all([personne])
-        session.commit()
-    return {"nom :" : nom,"Prenom :": prenom,"Email :":email,"telephone :":telephone,"preferences :":preferences,"adresse de livraison :":adresse_livraison,"adresse de facturation : ":adresse_facturation}
+Base.metadata.create_all(ENGINE)
