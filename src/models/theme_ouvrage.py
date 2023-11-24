@@ -9,5 +9,5 @@ class ThemeOuvrage(Base):
         ForeignKey("ouvrage.id_ouvrage"), primary_key=True
     )
     id_theme: Mapped[int] = mapped_column(
-        ForeignKey("ouvrage.id_ouvrage"), primary_key=True
+        ForeignKey("theme.id_theme"), primary_key=True
     )
