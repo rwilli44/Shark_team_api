@@ -2,7 +2,11 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
 from config.connexion import ENGINE
 from models.commentaire import Commentaire
-from schema.commentaire_schema import Commentaire_schema, CommentaireUpdate_schema
+from schema.commentaire_schema import (
+    CommentaireCreate_schema,
+    CommentaireRequest_schema,
+    CommentaireUpdate_schema,
+)
 from datetime import date
 
 
@@ -12,17 +16,17 @@ router = APIRouter()
 ##### Create #####
 @router.post(
     "/commentaires/add",
-    response_model=Commentaire_schema,
+    response_model=CommentaireRequest_schema,
     tags=["commentaires"],
     summary="Créer un commentaire",
     description="Créer un commentaire - avec : contenu_commentaire: str, titre_commentaire: str, id_client: int, id_ouvrage: int, et date_publication_commentaire: datetime.",
 )
-async def add_comment(commentaire: Commentaire_schema):
+async def add_comment(commentaire: CommentaireCreate_schema):
     with Session(ENGINE) as session:
         new_commentaire = Commentaire(**commentaire.dict())
         session.add_all([new_commentaire])
         session.commit()
-        return Commentaire_schema.model_validate(new_commentaire)
+        return CommentaireRequest_schema.model_validate(new_commentaire)
     raise HTTPException(
         status_code=404, detail="Le commentaire n'a pas pu être ajouté."
     )
@@ -31,7 +35,7 @@ async def add_comment(commentaire: Commentaire_schema):
 ##### Read #####
 @router.get(
     "/commentaires/{id_comment}",
-    response_model=Commentaire_schema,
+    response_model=CommentaireRequest_schema,
     tags=["commentaires"],
     summary="Lire un commentaire",
     description="Lire un commentaire par son ID.",
@@ -44,7 +48,7 @@ async def read_comment(id_to_read: int):
             .first()
         )
         if result:
-            return Commentaire_schema.model_validate(result)
+            return CommentaireRequest_schema.model_validate(result)
     raise HTTPException(
         status_code=404, detail="Le commentaire n'a pas pu être retrouvé."
     )
@@ -53,6 +57,7 @@ async def read_comment(id_to_read: int):
 ##### Update #####
 @router.patch(
     "/commentaires/{id_to_update}",
+    response_model=CommentaireRequest_schema,
     tags=["commentaires"],
     summary="Mettre à jour un commentaire",
     description="Éditer le titre (titre_commentaire) ou le contenu (contenu_commentaire) d'un Commentaire. La date de publication se met à jour automatiquement.",
@@ -75,7 +80,7 @@ async def update_commentaire(id_to_update: int, update_data: CommentaireUpdate_s
                 .first()
             )
 
-            return updated_comment
+            return CommentaireRequest_schema.model_validate(updated_comment)
         raise HTTPException(
             status_code=404, detail="Le commentaire n'a pas pu être mise à jour."
         )
