@@ -17,6 +17,7 @@ router = APIRouter()
 @router.post(
     "/commentaires/add",
     response_model=CommentaireRequest_schema,
+    status_code=201,
     tags=["commentaires"],
     summary="Créer un commentaire",
     description="Créer un commentaire - avec : contenu_commentaire: str, titre_commentaire: str, id_client: int, id_ouvrage: int, et date_publication_commentaire: datetime.",
