@@ -22,7 +22,7 @@ async def ajout_client(client : Client_schema):
             status_code=404, detail="Le client n'a pas pu être ajouté."
         )
     
-# creation d'une route pour modifier la Bdd table client
+# creation d'une route pour avoir information client de la Bdd table client
 @router.get("/information_client/{id}",tags=["Client"], summary="Affichage des informations relatives à un client via son id",description="Rentrer l'identité du client pour voir ses informations ")
 async def information_client(id : int):
     with Session(ENGINE) as session:
