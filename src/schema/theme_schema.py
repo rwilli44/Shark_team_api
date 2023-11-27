@@ -1,9 +1,13 @@
 from pydantic import BaseModel
 
 
-class Theme(BaseModel):
+class Theme_CreateUpdate_Schema(BaseModel):
     nom_theme: str
-    ouvrages: list = []
+
+
+class Theme_Read_Schema(BaseModel):
+    id_theme: int
+    nom_theme: str
 
     class Config:
         orm_mode = True
