@@ -22,12 +22,3 @@ async def get_db() -> Session:
         yield session
     finally:
         session.close()
-
-Session = sessionmaker(bind=ENGINE)
-
-def get_db():
-    try:
-        db = Session()
-        yield db
-    finally:
-        db.close()
