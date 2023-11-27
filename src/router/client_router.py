@@ -11,29 +11,13 @@ from config.connexion import get_db
 router = APIRouter()
 
 # creation d'une route pour remplire la Bdd table client
-@router.post("/inscription/")
-async def ajout_client(client: Client_schema):
-=======
 @router.post("/inscription/",tags=["Client"], summary="Inscription dans la base de données",description="Remplire le nom_client, prenom_client, email_client,telephone_client, preferences_client, adresse_livraison_client, adresse_facturation_client")
-
 async def ajout_client(client : Client_schema):
->>>>>>> 62dc0c3b69429ce2d50b59530749b126b3ed5f4a
     with Session(ENGINE) as session:
         personne = Client(**client.model_dump())
         session.add_all([personne])
         session.commit()
     return {"client ajouté": personne}
-
-
-# creation d'une route pour modifier la Bdd table client
-# @router.patch("/modification_client/{client_id}",response_model=Client_schema)
-# async def modif_client(client_id : int, client : Client_schema):
-#     stored_client_data = client[client_id] # recuperation des données via id
-#     stored_client_model = Client_schema(**stored_client_data) # on transforme les données client en Client_schema
-#     update_data = client.dict(exclude_unset=True) # transforme données de la requète en dictionnaire
-#     update_client =stored_client_model.copy(update=update_data) # application de la mise à jour partielle à l'objet existant
-#     client[client_id] = jsonable_encoder(update_client) # mise à jour BdD avec la version mise à jour
-#     return update_client # retour au client de l'objet mis à jour
     raise HTTPException(
             status_code=404, detail="Le client n'a pas pu être ajouté."
         )
