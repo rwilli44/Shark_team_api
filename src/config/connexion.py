@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker
 
 # Load environment variables from .env file
 load_dotenv()
@@ -21,3 +22,12 @@ async def get_db() -> Session:
         yield session
     finally:
         session.close()
+
+Session = sessionmaker(bind=ENGINE)
+
+def get_db():
+    try:
+        db = Session()
+        yield db
+    finally:
+        db.close()
