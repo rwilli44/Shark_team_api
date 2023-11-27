@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 # Load environment variables from .env file
 load_dotenv()
@@ -12,3 +13,12 @@ host = "localhost"
 database = "librairie"
 
 ENGINE = create_engine(f"{connector}://{user}:{password}@{host}/{database}")
+
+Session = sessionmaker(bind=ENGINE)
+
+def get_db():
+    try:
+        db = Session()
+        yield db
+    finally:
+        db.close()
