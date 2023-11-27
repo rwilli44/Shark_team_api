@@ -15,7 +15,7 @@ router = APIRouter()
 
 ##### Create #####
 @router.post(
-    "/commentaires/add",
+    "/commentaires",
     response_model=CommentaireRequest_schema,
     status_code=201,
     tags=["commentaires"],
@@ -23,14 +23,17 @@ router = APIRouter()
     description="Créer un commentaire - avec : contenu_commentaire: str, titre_commentaire: str, id_client: int, id_ouvrage: int, et date_publication_commentaire: datetime.",
 )
 async def add_comment(commentaire: CommentaireCreate_schema):
-    with Session(ENGINE) as session:
-        new_commentaire = Commentaire(**commentaire.dict())
-        session.add_all([new_commentaire])
-        session.commit()
-        return CommentaireRequest_schema.model_validate(new_commentaire)
-    raise HTTPException(
-        status_code=404, detail="Le commentaire n'a pas pu être ajouté."
-    )
+    try:
+        with Session(ENGINE) as session:
+            new_commentaire = Commentaire(**commentaire.dict())
+            session.add_all([new_commentaire])
+            session.commit()
+            return CommentaireRequest_schema.model_validate(new_commentaire)
+    except Exception as e:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Le commentaire n'a pas pu être ajouté: {str(e)}",
+        )
 
 
 ##### Read #####
@@ -75,13 +78,8 @@ async def update_commentaire(id_to_update: int, update_data: CommentaireUpdate_s
                 setattr(db_commentaire, field, value)
             setattr(db_commentaire, "date_publication_commentaire", date.today())
             session.commit()
-            updated_comment = (
-                session.query(Commentaire)
-                .filter(Commentaire.id_commentaire == id_to_update)
-                .first()
-            )
-
-            return CommentaireRequest_schema.model_validate(updated_comment)
+            session.refresh(db_commentaire)
+            return CommentaireRequest_schema.model_validate(db_commentaire)
         raise HTTPException(
             status_code=404, detail="Le commentaire n'a pas pu être mise à jour."
         )
@@ -92,14 +90,13 @@ async def update_commentaire(id_to_update: int, update_data: CommentaireUpdate_s
     "/commentaires/{id_to_delete}",
     tags=["commentaires"],
     summary="Supprimer un commentaire",
-    description="Supprime définitivement un commentaire - à utiliser judicieusement.",
+    description="Supprimer définitivement un commentaire - à utiliser judicieusement.",
 )
 async def delete_commentaire(id_to_delete: int):
     with Session(ENGINE) as session:
         comment_to_delete = (
             session.query(Commentaire).filter_by(id_commentaire=id_to_delete).first()
         )
-        print(comment_to_delete)
         if comment_to_delete:
             session.delete(comment_to_delete)
             session.commit()
