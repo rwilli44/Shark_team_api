@@ -13,12 +13,14 @@ router = APIRouter()
 # creation d'une route pour remplire la Bdd table client
 @router.post("/inscription/",tags=["Client"], summary="Inscription dans la base de données",description="Remplire le nom_client, prenom_client, email_client,telephone_client, preferences_client, adresse_livraison_client, adresse_facturation_client")
 async def ajout_client(client : Client_schema):
-
     with Session(ENGINE) as session:
         personne = Client(**client.model_dump())
         session.add_all([personne])
         session.commit()
     return {"client ajouté": personne}
+    raise HTTPException(
+            status_code=404, detail="Le client n'a pas pu être ajouté."
+        )
     
 # creation d'une route pour avoir information client de la Bdd table client
 @router.get("/information_client/{id}",tags=["Client"], summary="Affichage des informations relatives à un client via son id",description="Rentrer l'identité du client pour voir ses informations ")
