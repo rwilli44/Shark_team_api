@@ -57,7 +57,7 @@ async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
 async def delete_ouvrage(id_ouvrage_get: int):
     with Session(ENGINE) as session:
         ouvrage_db = (
-            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_delete).first()
         )
         if ouvrage_db:
             session.delete(ouvrage_db)

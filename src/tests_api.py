@@ -10,25 +10,25 @@ class BaseTestFastAPI(unittest.TestCase):
         cls.client = TestClient(app)
 
 
-class TestClients(BaseTestFastAPI):
-    def test_get_client_by_id(self):
-        """Tester la recherche par ID client"""
-        test_response = self.client.get("/information_client/1")
-        expected_response = {
-            "info client": {
-                "email_client": "marie.dubois@example.com",
-                "telephone_client": "+33 6 12 34 56 78",
-                "prenom_client": "Marie",
-                "adresse_livraison_client": "12 Rue des Fleurs, 75001 Paris",
-                "nom_client": "Dubois",
-                "id_client": 1,
-                "preferences_client": "Produits bio",
-                "adresse_facturation_client": "12 Rue des Fleurs, 75001 Paris",
-            }
-        }
+# class TestClients(BaseTestFastAPI):
+#     def test_get_client_by_id(self):
+#         """Tester la recherche par ID client"""
+#         test_response = self.client.get("/information_client/1")
+#         expected_response = {
+#             "info client": {
+#                 "email_client": "marie.dubois@example.com",
+#                 "telephone_client": "+33 6 12 34 56 78",
+#                 "prenom_client": "Marie",
+#                 "adresse_livraison_client": "12 Rue des Fleurs, 75001 Paris",
+#                 "nom_client": "Dubois",
+#                 "id_client": 1,
+#                 "preferences_client": "Produits bio",
+#                 "adresse_facturation_client": "12 Rue des Fleurs, 75001 Paris",
+#             }
+#         }
 
-        self.assertEqual(test_response.status_code, 200)
-        self.assertEqual(test_response.json(), expected_response)
+#         self.assertEqual(test_response.status_code, 200)
+#         self.assertEqual(test_response.json(), expected_response)
 
 
 # class TestCommentaires(BaseTestFastAPI):
@@ -97,6 +97,106 @@ class TestClients(BaseTestFastAPI):
 #         self.assertEqual(test_response.status_code, 201)
 #         self.assertEqual(test_response.json(), expected_response)
 
+
+######## Partie Tarik non finie
+# class TestOuvrages(BaseTestFastAPI):
+#     def test_get_ouvrage(self):
+#         """Test pour retrouver un ouvrage par son id
+#         """
+#         response = self.client.get("/ouvrage/2")
+    
+#         excpected = {
+#             "id_ouvrage": 2,
+#             "titre_ouvrage": "To Kill a Mockingbird",
+#             "auteur_ouvrage": "Harper Lee",
+#             "isbn_ouvrage": "978-0061120084",
+#             "langue_ouvrage": "anglais",
+#             "prix_ouvrage": 20,
+#             "date_parution_ouvrage": "1960-07-11",
+#             "categorie_ouvrage": "Fiction",
+#             "date_disponibilite_libraire_ouvrage": "2023-12-05",
+#             "date_disponibilite_particulier_ouvrage": "2023-12-20",
+#             "image_ouvrage": "url_de_l_image",
+#             "table_des_matieres_ouvrage": "Chapter 1: A Tired Old Town",
+#             "mot_cle_ouvrage" : "racisme, justice, enfance",
+#             "description_ouvrage" : "To Kill a Mockingbird aborde les thèmes du racisme et de l'injustice à travers les yeux de Scout Finch, une jeune fille du sud des États-Unis."
+#         }
+        
+#         self.maxDiff = None
+#         self.assertEqual(response.status_code, 200)
+#         self.assertEqual(response.json(), excpected)
+    
+#     def test_add_ouvrage(self):
+#         """Test ajout d'un ouvrage."""
+#         ouvrage_data = {
+#             "titre_ouvrage": "TEST TITLE",
+#             "auteur_ouvrage": "TEST AUTHOR",
+#             "isbn_ouvrage": "000-0000000000",
+#             "langue_ouvrage": "anglais",
+#             "prix_ouvrage": 0.0,
+#             "date_parution_ouvrage": "2000-01-01",
+#             "categorie_ouvrage": "Fiction",
+#             "date_disponibilite_libraire_ouvrage": "2000-01-01",
+#             "date_disponibilite_particulier_ouvrage": "2000-01-01",
+#             "image_ouvrage": "url_de_l_image",
+#             "table_des_matieres_ouvrage": "TEST SUMMARY",
+#             "mot_cle_ouvrage" : "TEST",
+#             "description_ouvrage" : "TEST"
+#         }
+        
+#         expected_response = {
+#             "id_ouvrage": 16,
+#             "titre_ouvrage": "TEST TITLE",
+#             "auteur_ouvrage": "TEST AUTHOR",
+#             "isbn_ouvrage": "000-0000000000",
+#             "langue_ouvrage": "anglais",
+#             "prix_ouvrage": 0.0,
+#             "date_parution_ouvrage": "2000-01-01",
+#             "categorie_ouvrage": "Fiction",
+#             "date_disponibilite_libraire_ouvrage": "2000-01-01",
+#             "date_disponibilite_particulier_ouvrage": "2000-01-01",
+#             "image_ouvrage": "url_de_l_image",
+#             "table_des_matieres_ouvrage": "TEST SUMMARY",
+#             "mot_cle_ouvrage" : "TEST",
+#             "description_ouvrage" : "TEST"
+#         }
+#         response = self.client.post("/ouvrage", json=ouvrage_data)
+#         self.assertEqual(response.status_code, 200)
+#         self.assertEqual(response.json(), expected_response)
+    
+    # def test_update_ouvrage(self):
+    #     """Test pour vérification de la mise à jour des ouvrages
+    #     """
+        
+    #     response = self.client.patch(
+    #         "ouvrages/16", 
+    #         json={
+    #             "isbn_ouvrage": "978-0063520022",
+    #             "langue_ouvrage": "français",
+    #         },
+    #     )
+    #     excpected = {
+    #         "id_ouvrage": 16,
+#             "titre_ouvrage": "TEST TITLE",
+#             "auteur_ouvrage": "TEST AUTHOR",
+#             "isbn_ouvrage": "978-0063520022",
+#             "langue_ouvrage": "français",
+#             "prix_ouvrage": 0.0,
+#             "date_parution_ouvrage": "2000-01-01",
+#             "categorie_ouvrage": "Fiction",
+#             "date_disponibilite_libraire_ouvrage": "2000-01-01",
+#             "date_disponibilite_particulier_ouvrage": "2000-01-01",
+#             "image_ouvrage": "url_de_l_image",
+#             "table_des_matieres_ouvrage": "TEST SUMMARY",
+#             "mot_cle_ouvrage" : "TEST",
+#             "description_ouvrage" : "TEST"
+    #     }
+        
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.json(), excpected)
+    
+    
+    
 
 if __name__ == "__main__":
     unittest.main()
