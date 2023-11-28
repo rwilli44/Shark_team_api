@@ -1,9 +1,6 @@
-# Standard library imports
-from datetime import datetime
 from typing import Optional
-
-# Third party imports
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class CommentaireCreate_schema(BaseModel):

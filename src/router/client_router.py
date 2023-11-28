@@ -1,19 +1,16 @@
-# Third party imports
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
 from sqlalchemy.orm import Session
-
-# Local imports
-from config.connexion import ENGINE
+from sqlalchemy import select
 from models.client import Client
+from config.connexion import ENGINE
 from schema.client_schema import Client_schema, Client_schema_optionnel
+from fastapi.encoders import jsonable_encoder
+from config.connexion import get_db
 from models.commentaire import Commentaire
 
 router = APIRouter()
 
 
-##### Create #####
 # creation d'une route pour remplire la Bdd table client
 @router.post(
     "/inscription/",
@@ -35,7 +32,6 @@ async def ajout_client(client: Client_schema):
         )
 
 
-##### Read #####
 # creation d'une route pour avoir information client de la Bdd table client
 @router.get(
     "/information_client/{id}",
@@ -53,30 +49,6 @@ async def information_client(id: int):
     )
 
 
-##### Update #####
-# creation d'une route pour modifier la Bdd table client
-@router.patch(
-    "/modification_client/{id}",
-    response_model=Client_schema,
-    tags=["Client"],
-    summary="Modification d'un client dans la base de données via son id",
-    description="Rentrer l'identité du client et modifier seulement les attribus nécessaires",
-)
-async def modif_client(id: int, client_update: Client_schema_optionnel):
-    with Session(ENGINE) as session:
-        client_db = session.query(Client).filter(Client.id_client == id).first()
-        if client_db:
-            for cle, valeur in client_update.dict(exclude_unset=True).items():
-                setattr(client_db, cle, valeur)
-            session.commit()
-            session.refresh(client_db)
-            return Client_schema.from_orm(client_db)
-    raise HTTPException(
-        status_code=404, detail="La mise à jour du client n'a pu être réalisée."
-    )
-
-
-##### Delete #####
 # creation d'une route pour effacer la Bdd table client
 @router.delete(
     "/suppression_client/{id}",
@@ -98,6 +70,28 @@ async def suppression_client(id: int):
             session.commit()
             return {"personne supprimée": client_db}
     raise HTTPException(status_code=404, detail="Suppression client impossible.")
+
+
+# creation d'une route pour modifier la Bdd table client
+@router.patch(
+    "/modification_client/{id}",
+    response_model=Client_schema,
+    tags=["Client"],
+    summary="Modification d'un client dans la base de données via son id",
+    description="Rentrer l'identité du client et modifier seulement les attribus nécessaires",
+)
+async def modif_client(id: int, client_update: Client_schema_optionnel):
+    with Session(ENGINE) as session:
+        client_db = session.query(Client).filter(Client.id_client == id).first()
+        if client_db:
+            for cle, valeur in client_update.dict(exclude_unset=True).items():
+                setattr(client_db, cle, valeur)
+            session.commit()
+            session.refresh(client_db)
+            return Client_schema.from_orm(client_db)
+    raise HTTPException(
+        status_code=404, detail="La mise à jour du client n'a pu être réalisée."
+    )
 
 
 """

@@ -1,4 +1,3 @@
-# Third party imports
 from pydantic import BaseModel
 
 
@@ -15,8 +14,9 @@ class Client_schema(BaseModel):
         orm_mode = True
         from_attributes = True
 
-
+    
 class Client_schema_optionnel(BaseModel):
+
     nom_client: str | None = None
     prenom_client: str | None = None
     email_client: str | None = None
