@@ -71,6 +71,7 @@ nom_projet/
    Cela lancera le serveur d'application sur `http://localhost:8000`.
 3. Accédez au Swagger de FastAPI en rajoutant à l'url `/docs`
 4. Modifiez le Swagger à votre convenance en fonction des commentaires de chaque rubrique à côté des POST/GET/DELETE/PATCH : vous pourrez alors voir, via votre lecteur de database, les tables évoluer avec les données que vous avez rentrées.
+5. Pour réaliser des tests unitaires, créer une base de données qui s'appelle test et utiliser le script SQL `create_test_db.sql` pour créer et remplir les tables. Utiliser le script `drop_tables_test_db.sql` si besoin pour supprimer les tables avant de les recréer si les tests sont répétés. Dans le fichier config, changer le nom de base de données à test. Ensuite, depuis le fichier src, lancer le script des tests avec python -m tests_unitaire.
 
 ## Contributions
 
