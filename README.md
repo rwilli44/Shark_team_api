@@ -1,4 +1,4 @@
-﻿Projet Python création API
+Projet Python création API
 
 ## Description
 
@@ -69,4 +69,3 @@ nom_projet/
 
 ## Contributions
 Ce projet a été développé par Rachel Williams, Tarik Sadkhi et Damien Vialla de Soleyrol avec l'aide de Robin Hotton.
-
