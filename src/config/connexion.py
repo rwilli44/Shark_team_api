@@ -11,7 +11,7 @@ connector = "mysql+pymysql"
 user = os.getenv("DATABASE_USERNAME")
 password = os.getenv("DATABASE_PASSWORD")
 host = "localhost"
-database = "librairie"
+database = "test"
 
 ENGINE = create_engine(f"{connector}://{user}:{password}@{host}/{database}")
 
