@@ -10,19 +10,25 @@ router = APIRouter()
 
 ##### Read #####
 @router.get("/ouvrages/{id_ouvrage}", tags=["ouvrage"])
-async def get_ouvrage(id_ouvrage_get: int,):
+async def get_ouvrage(
+    id_ouvrage_get: int,
+):
     with Session(ENGINE) as session:
-        ouvrage_db = session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+        ouvrage_db = (
+            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+        )
         if ouvrage_db:
             return ouvrage_db
-    raise HTTPException(
-        status_code=404, detail="L'ouvrage n'a pas pu être retrouvé."
-    )
+    raise HTTPException(status_code=404, detail="L'ouvrage n'a pas pu être retrouvé.")
+
+
 ##### Create #####
-@router.post("/ouvrage/",
-             response_model=Ouvrage_schema, 
-             tags=["ouvrage"],
-             summary="Créer un ouvrage")
+@router.post(
+    "/ouvrage/",
+    response_model=Ouvrage_schema,
+    tags=["ouvrage"],
+    summary="Créer un ouvrage",
+)
 async def create_ouvrage(ouvrage: Ouvrage_schema):
     with Session(ENGINE) as session:
         ouvrage_model = Ouvrage(**ouvrage.dict())
@@ -30,26 +36,30 @@ async def create_ouvrage(ouvrage: Ouvrage_schema):
         session.commit()
         return Ouvrage_schema.from_orm(ouvrage_model)
 
+
 ##### Update #####
 @router.patch("/ouvrage/{id_ouvrage}", response_model=Ouvrage_schema, tags=["ouvrage"])
-async def get_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
+async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
     with Session(ENGINE) as session:
         db_ouvrage = (
             session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_up).first()
         )
-        if db_ouvrage: 
+        if db_ouvrage:
             for key, value in ouvrage.dict(exclude_unset=True).items():
                 setattr(db_ouvrage, key, value)
             session.commit()
             session.refresh(db_ouvrage)
         return Ouvrage_schema.from_orm(db_ouvrage)
 
+
 ##### Delete #####
 @router.delete("/ouvrage/{id_ouvrage}", tags=["ouvrage"])
 async def delete_ouvrage(id_ouvrage_get: int):
     with Session(ENGINE) as session:
-        ouvrage_db = session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+        ouvrage_db = (
+            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+        )
         if ouvrage_db:
             session.delete(ouvrage_db)
             session.commit()
-            return {"Ouvrage supprimé: " : ouvrage_db}
+            return {"Ouvrage supprimé: ": ouvrage_db}
