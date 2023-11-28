@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -7,62 +6,94 @@ from config.connexion import ENGINE
 from schema.client_schema import Client_schema, Client_schema_optionnel
 from fastapi.encoders import jsonable_encoder
 from config.connexion import get_db
+from models.commentaire import Commentaire
 
 router = APIRouter()
 
+
 # creation d'une route pour remplire la Bdd table client
-@router.post("/inscription/",tags=["Client"], summary="Inscription dans la base de données",description="Remplire le nom_client, prenom_client, email_client,telephone_client, preferences_client, adresse_livraison_client, adresse_facturation_client")
-async def ajout_client(client : Client_schema):
+@router.post(
+    "/inscription/",
+    status_code=201,
+    tags=["Client"],
+    summary="Inscription dans la base de données",
+    description="Remplire le nom_client, prenom_client, email_client,telephone_client, preferences_client, adresse_livraison_client, adresse_facturation_client",
+)
+async def ajout_client(client: Client_schema):
     try:
         with Session(ENGINE) as session:
             personne = Client(**client.dict())
             session.add_all([personne])
             session.commit()
             return Client_schema.from_orm(personne)
-    except Exception as e :
+    except Exception as e:
         raise HTTPException(
-                status_code=404, detail=f"Le client n'a pas pu être ajouté : '{str(e)}'."
-            )
-    
-# creation d'une route pour avoir information client de la Bdd table client
-@router.get("/information_client/{id}",tags=["Client"], summary="Affichage des informations relatives à un client via son id",description="Rentrer l'identité du client pour voir ses informations ")
-async def information_client(id : int):
-    with Session(ENGINE) as session:
-        client_db = session.query(Client).filter(Client.id_client == id).first()
-        if client_db:
-            return {"info client" : client_db}
-    raise HTTPException(
-            status_code=404, detail="Aucune information disponible sur ce client."
+            status_code=404, detail=f"Le client n'a pas pu être ajouté : '{str(e)}'."
         )
-    
-# creation d'une route pour effacer la Bdd table client
-@router.delete("/suppression_client/{id}",tags=["Client"], summary="Suppression d'un client dans la base de données via son id",description="Rentrer l'identité du client et appuyer sur supprimer")
-async def suppression_client(id : int):
+
+
+# creation d'une route pour avoir information client de la Bdd table client
+@router.get(
+    "/information_client/{id}",
+    tags=["Client"],
+    summary="Affichage des informations relatives à un client via son id",
+    description="Rentrer l'identité du client pour voir ses informations ",
+)
+async def information_client(id: int):
     with Session(ENGINE) as session:
         client_db = session.query(Client).filter(Client.id_client == id).first()
         if client_db:
+            return {"info client": client_db}
+    raise HTTPException(
+        status_code=404, detail="Aucune information disponible sur ce client."
+    )
+
+
+# creation d'une route pour effacer la Bdd table client
+@router.delete(
+    "/suppression_client/{id}",
+    tags=["Client"],
+    summary="Suppression d'un client dans la base de données via son id",
+    description="Rentrer l'identité du client et appuyer sur supprimer",
+)
+async def suppression_client(id: int):
+    with Session(ENGINE) as session:
+        client_db = session.query(Client).filter(Client.id_client == id).first()
+        if client_db:
+            client_comments = (
+                session.query(Commentaire).filter(Commentaire.id_client == id).all()
+            )
+            for commentaire in client_comments:
+                session.delete(commentaire)
+                session.commit()
             session.delete(client_db)
             session.commit()
-            return {"personne supprimée" : client_db}
-    raise HTTPException(
-            status_code=404, detail="Suppression client impossible."
-        )
-    
+            return {"personne supprimée": client_db}
+    raise HTTPException(status_code=404, detail="Suppression client impossible.")
+
+
 # creation d'une route pour modifier la Bdd table client
-@router.patch("/modification_client/{id}",response_model=Client_schema,tags=["Client"], summary="Modification d'un client dans la base de données via son id",description="Rentrer l'identité du client et modifier seulement les attribus nécessaires")
-async def modif_client(id : int, client_update : Client_schema_optionnel):
+@router.patch(
+    "/modification_client/{id}",
+    response_model=Client_schema,
+    tags=["Client"],
+    summary="Modification d'un client dans la base de données via son id",
+    description="Rentrer l'identité du client et modifier seulement les attribus nécessaires",
+)
+async def modif_client(id: int, client_update: Client_schema_optionnel):
     with Session(ENGINE) as session:
         client_db = session.query(Client).filter(Client.id_client == id).first()
         if client_db:
-            for cle,valeur in client_update.dict(exclude_unset=True).items():
+            for cle, valeur in client_update.dict(exclude_unset=True).items():
                 setattr(client_db, cle, valeur)
             session.commit()
             session.refresh(client_db)
             return Client_schema.from_orm(client_db)
     raise HTTPException(
-            status_code=404, detail="La mise à jour du client n'a pu être réalisée."
-        )
-  
+        status_code=404, detail="La mise à jour du client n'a pu être réalisée."
+    )
+
+
 """
 Vu avec Robin, ne fonctionne pas : pbe de dict sur stored_client_model
 Code Robin en deuxième partie, non utilisé, on est passé en query
