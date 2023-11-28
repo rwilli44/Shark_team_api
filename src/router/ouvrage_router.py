@@ -46,23 +46,26 @@ async def create_ouvrage(ouvrage: Ouvrage_schema):
 
 ##### Update #####
 @router.patch(
-    "/ouvrage/{id_ouvrage}",
+    "/ouvrage/{id_ouvrage_up}",
     response_model=Ouvrage_schema,
     tags=["ouvrage"],
     summary="Mise à jour de l'ouvrage selectionné via l'id",
     description="Changement du champs qui est nécessaire, les autres champs peuvent ne pas être envoyés et garderont leur ancienne valeur",
 )
-async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
+async def update_ouvrage(id_ouvrage_up: int, ouvrage_update: Ouvrage_schema_optionnel):
     with Session(ENGINE) as session:
         db_ouvrage = (
             session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_up).first()
         )
         if db_ouvrage:
-            for key, value in ouvrage.dict(exclude_unset=True).items():
-                setattr(db_ouvrage, key, value)
+            for field, value in ouvrage_update.dict(exclude_unset=True).items():
+                setattr(db_ouvrage, field, value)
             session.commit()
             session.refresh(db_ouvrage)
-        return Ouvrage_schema.from_orm(db_ouvrage)
+            return Ouvrage_schema.model_validate(db_ouvrage)
+        raise HTTPException(
+            status_code=404, detail="L'ouvrage n'a pas pu être mise à jour."
+        )
 
 
 ##### Delete #####
