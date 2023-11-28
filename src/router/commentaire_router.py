@@ -44,11 +44,11 @@ async def add_comment(commentaire: CommentaireCreate_schema):
     summary="Lire un commentaire",
     description="Lire un commentaire par son ID.",
 )
-async def read_comment(id_to_read: int):
+async def read_comment(id_comment: int):
     with Session(ENGINE) as session:
         result = (
             session.query(Commentaire)
-            .where(Commentaire.id_commentaire == id_to_read)
+            .where(Commentaire.id_commentaire == id_comment)
             .first()
         )
         if result:
@@ -88,6 +88,7 @@ async def update_commentaire(id_to_update: int, update_data: CommentaireUpdate_s
 ##### Delete #####
 @router.delete(
     "/commentaires/{id_to_delete}",
+    status_code=201,
     tags=["commentaires"],
     summary="Supprimer un commentaire",
     description="Supprimer définitivement un commentaire - à utiliser judicieusement.",
