@@ -64,7 +64,6 @@ async def suppression_client(id: int):
                 session.query(Commentaire).filter(Commentaire.id_client == id).all()
             )
             for commentaire in client_comments:
-                print(commentaire)
                 session.delete(commentaire)
                 session.commit()
             session.delete(client_db)
