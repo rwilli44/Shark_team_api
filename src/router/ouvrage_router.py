@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 ##### Read #####
-@router.get("/ouvrages/{id_ouvrage}", tags=["ouvrage"])
+@router.get("/ouvrage/{id_ouvrage_get}", tags=["ouvrage"])
 async def get_ouvrage(
     id_ouvrage_get: int,
 ):
@@ -38,7 +38,7 @@ async def create_ouvrage(ouvrage: Ouvrage_schema):
 
 
 ##### Update #####
-@router.patch("/ouvrage/{id_ouvrage}", response_model=Ouvrage_schema, tags=["ouvrage"])
+@router.patch("/ouvrage/{id_ouvrage_up}", response_model=Ouvrage_schema, tags=["ouvrage"])
 async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
     with Session(ENGINE) as session:
         db_ouvrage = (
@@ -53,11 +53,11 @@ async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
 
 
 ##### Delete #####
-@router.delete("/ouvrage/{id_ouvrage}", tags=["ouvrage"])
-async def delete_ouvrage(id_ouvrage_get: int):
+@router.delete("/ouvrage/{id_ouvrage_delete}", tags=["ouvrage"])
+async def delete_ouvrage(id_ouvrage_delete: int):
     with Session(ENGINE) as session:
         ouvrage_db = (
-            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_get).first()
+            session.query(Ouvrage).filter(Ouvrage.id_ouvrage == id_ouvrage_delete).first()
         )
         if ouvrage_db:
             session.delete(ouvrage_db)
