@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 ##### Read #####
-@router.get("/ouvrages/{id_ouvrage}", tags=["ouvrage"])
+@router.get("/ouvrages/{id_ouvrage}", tags=["ouvrage"],summary="Donne les informations en fonction de l'id ouvrage",description="Saisir l'id ouvrage pour en voir les informations")
 async def get_ouvrage(
     id_ouvrage_get: int,
 ):
@@ -27,7 +27,7 @@ async def get_ouvrage(
     "/ouvrage/",
     response_model=Ouvrage_schema,
     tags=["ouvrage"],
-    summary="Créer un ouvrage",
+    summary="Création d'un ouvrage",description="Saisir les champs spécifiques à la création de l'ouvrage"
 )
 async def create_ouvrage(ouvrage: Ouvrage_schema):
     with Session(ENGINE) as session:
@@ -38,7 +38,7 @@ async def create_ouvrage(ouvrage: Ouvrage_schema):
 
 
 ##### Update #####
-@router.patch("/ouvrage/{id_ouvrage}", response_model=Ouvrage_schema, tags=["ouvrage"])
+@router.patch("/ouvrage/{id_ouvrage}", response_model=Ouvrage_schema, tags=["ouvrage"], summary="Mise à jour de l'ouvrage selectionné via l'id",description="Changement du champs qui est nécessaire, les autres champs peuvent être supprimés et garderont leur ancienne valeur")
 async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
     with Session(ENGINE) as session:
         db_ouvrage = (
@@ -53,7 +53,7 @@ async def update_ouvrage(id_ouvrage_up: int, ouvrage: Ouvrage_schema_optionnel):
 
 
 ##### Delete #####
-@router.delete("/ouvrage/{id_ouvrage}", tags=["ouvrage"])
+@router.delete("/ouvrage/{id_ouvrage}", tags=["ouvrage"],summary="Effacement d'un ouvrage via son id",description="Saisir l'id pour le supprimer")
 async def delete_ouvrage(id_ouvrage_get: int):
     with Session(ENGINE) as session:
         ouvrage_db = (
@@ -63,3 +63,13 @@ async def delete_ouvrage(id_ouvrage_get: int):
             session.delete(ouvrage_db)
             session.commit()
             return {"Ouvrage supprimé: ": ouvrage_db}
+
+##### Read #####
+@router.get("/recherche/{critere_tri}&{nom}", tags=["recherche"],summary="Recherche à double paramètre",description="Rentrer dans la première variable le type de recherche que vous voulez faire (auteur, thème, ...) et remplire dans la deuxième variable le nom associé")
+async def get_recherche(critere : str, nom : str):
+    with Session(ENGINE) as session:
+        if critere == "auteur":
+            ouvrage_db = (session.query(Ouvrage).filter(Ouvrage.auteur_ouvrage == nom))
+        if ouvrage_db:
+            return ouvrage_db
+    raise HTTPException(status_code=404, detail="L'ouvrage n'a pas pu être retrouvé.")
