@@ -98,7 +98,7 @@ class BaseTestFastAPI(unittest.TestCase):
 #         self.assertEqual(test_response.json(), expected_response)
 
 
-# Partie Tarik non finie
+######## Partie Tarik non finie
 # class TestOuvrages(BaseTestFastAPI):
 #     def test_get_ouvrage(self):
 #         """Test pour retrouver un ouvrage par son id
@@ -169,31 +169,34 @@ class BaseTestFastAPI(unittest.TestCase):
     #     """
         
     #     response = self.client.patch(
-    #         "ouvrages/2", 
+    #         "ouvrages/16", 
     #         json={
     #             "isbn_ouvrage": "978-0063520022",
     #             "langue_ouvrage": "français",
     #         },
     #     )
     #     excpected = {
-    #         "id_ouvrage": 2,
-    #         "titre_ouvrage": "To Kill a Mockingbird",
-    #         "auteur_ouvrage": "Harper Lee",
-    #         "isbn_ouvrage": "978-0063520022",
-    #         "langue_ouvrage": "français",
-    #         "prix_ouvrage": 20,
-    #         "date_parution_ouvrage": "1960-07-11",
-    #         "categorie_ouvrage": "Fiction",
-    #         "date_disponibilite_libraire_ouvrage": "2023-12-05",
-    #         "date_disponibilite_particulier_ouvrage": "2023-12-20",
-    #         "image_ouvrage": "url_de_l_image",
-    #         "table_des_matieres_ouvrage": "Chapter 1: A Tired Old Town",
-    #         "mot_cle_ouvrage" : "racisme, justice, enfance",
-    #         "description_ouvrage" : "To Kill a Mockingbird aborde les thèmes du racisme et de l'injustice à travers les yeux de Scout Finch, une jeune fille du sud des États-Unis."
+    #         "id_ouvrage": 16,
+#             "titre_ouvrage": "TEST TITLE",
+#             "auteur_ouvrage": "TEST AUTHOR",
+#             "isbn_ouvrage": "978-0063520022",
+#             "langue_ouvrage": "français",
+#             "prix_ouvrage": 0.0,
+#             "date_parution_ouvrage": "2000-01-01",
+#             "categorie_ouvrage": "Fiction",
+#             "date_disponibilite_libraire_ouvrage": "2000-01-01",
+#             "date_disponibilite_particulier_ouvrage": "2000-01-01",
+#             "image_ouvrage": "url_de_l_image",
+#             "table_des_matieres_ouvrage": "TEST SUMMARY",
+#             "mot_cle_ouvrage" : "TEST",
+#             "description_ouvrage" : "TEST"
     #     }
         
     #     self.assertEqual(response.status_code, 200)
     #     self.assertEqual(response.json(), excpected)
+    
+    
+    
 
 if __name__ == "__main__":
     unittest.main()
