@@ -1,5 +1,8 @@
+# Third party imports
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
+
+# Local imports
 from config.connexion import ENGINE
 from models.theme import Theme
 from schema.theme_schema import Theme_CreateUpdate_Schema, Theme_Read_Schema

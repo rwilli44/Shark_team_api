@@ -1,6 +1,6 @@
 # Third party imports
-import unittest
 from fastapi.testclient import TestClient
+import unittest
 
 # Local imports
 from main import app
