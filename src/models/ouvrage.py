@@ -1,10 +1,16 @@
+# Third party imports
+from sqlalchemy import String, Date, Numeric
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+# Local imports
 from .base import Base
-from sqlalchemy import ForeignKey, String, Date, Numeric
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column, relationship
 
 
 class Ouvrage(Base):
+    """Classe pour créer le table ouvrage et les objets pour représenter
+    les lignes du table qui contient tous les livres trouvés dans
+    la librairie"""
+
     __tablename__ = "ouvrage"
 
     id_ouvrage: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

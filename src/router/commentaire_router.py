@@ -1,5 +1,11 @@
+# Standard library imports
+from datetime import date
+
+# Third party imports
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
+
+# Local imports
 from config.connexion import ENGINE
 from models.commentaire import Commentaire
 from schema.commentaire_schema import (
@@ -7,7 +13,6 @@ from schema.commentaire_schema import (
     CommentaireRequest_schema,
     CommentaireUpdate_schema,
 )
-from datetime import date
 
 
 router = APIRouter()

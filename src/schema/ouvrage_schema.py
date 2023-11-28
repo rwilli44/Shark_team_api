@@ -1,5 +1,8 @@
-from pydantic import BaseModel
+# Standard library imports
 from datetime import date
+
+# Third party imports
+from pydantic import BaseModel
 
 
 class Ouvrage_schema(BaseModel):
@@ -16,7 +19,6 @@ class Ouvrage_schema(BaseModel):
     table_des_matieres_ouvrage: str
     mot_cle_ouvrage: str
     description_ouvrage: str
-    commentaires: list = []
 
     # Permet de passer facilement du modèle au schéma
     class Config:
@@ -38,7 +40,6 @@ class Ouvrage_schema_optionnel(BaseModel):
     table_des_matieres_ouvrage: str | None = None
     mot_cle_ouvrage: str | None = None
     description_ouvrage: str | None = None
-    commentaires: list = []
 
     # Permet de passer facilement du modèle au schéma
     class Config:
