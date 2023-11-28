@@ -6,6 +6,7 @@ from config.connexion import ENGINE
 from schema.client_schema import Client_schema, Client_schema_optionnel
 from fastapi.encoders import jsonable_encoder
 from config.connexion import get_db
+from models.commentaire import Commentaire
 
 router = APIRouter()
 
@@ -59,6 +60,12 @@ async def suppression_client(id: int):
     with Session(ENGINE) as session:
         client_db = session.query(Client).filter(Client.id_client == id).first()
         if client_db:
+            client_comments = (
+                session.query(Commentaire).filter(Commentaire.id_client == id).all()
+            )
+            for commentaire in client_comments:
+                session.delete(commentaire)
+                session.commit()
             session.delete(client_db)
             session.commit()
             return {"personne supprimée": client_db}
