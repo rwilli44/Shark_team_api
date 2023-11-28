@@ -64,12 +64,40 @@ async def delete_ouvrage(id_ouvrage_get: int):
             session.commit()
             return {"Ouvrage supprimé: ": ouvrage_db}
 
-##### Read #####
-@router.get("/recherche/{critere_tri}&{nom}", tags=["recherche"],summary="Recherche à double paramètre",description="Rentrer dans la première variable le type de recherche que vous voulez faire (auteur, thème, ...) et remplire dans la deuxième variable le nom associé")
+##### recherche unitaire #####
+@router.get("/recherche_unitaire/{critere}/{nom}", tags=["recherche"],summary="Recherche suivant un attribut",description="Rentrer dans le critère de recherche soit auteur, soit catégorie, soit langue, soit mot clé ou titre. Ensuite  rentrer le nom que vous souhaitez afin de chercher dans la base de données")
 async def get_recherche(critere : str, nom : str):
     with Session(ENGINE) as session:
-        if critere == "auteur":
-            ouvrage_db = (session.query(Ouvrage).filter(Ouvrage.auteur_ouvrage == nom))
+        
+        dic_critere = { "critere" : {"auteur": Ouvrage.auteur_ouvrage,"catégorie": Ouvrage.categorie_ouvrage,"langue":Ouvrage.langue_ouvrage,"mot clé":Ouvrage.mot_cle_ouvrage,"titre":Ouvrage.titre_ouvrage}}
+        
+        for cle, valeur in dic_critere["critere"].items():
+            if cle == critere:
+                ouvrage_db = (session.query(Ouvrage).filter(valeur.contains(nom))).all()
+            break
+
         if ouvrage_db:
             return ouvrage_db
-    raise HTTPException(status_code=404, detail="L'ouvrage n'a pas pu être retrouvé.")
+    raise HTTPException(status_code=404, detail="Aucun ouvrage n'a pu être trouvé.")
+
+##### recherche double critère #####
+@router.get("/recherche_double/{critere1}/{nom1}/{critere2}/{nom2}", tags=["recherche"],summary="Recherche suivant deux attributs",description="Rentrer dans les critères de recherche soit auteur, soit catégorie, soit langue, soit mot clé. Ensuite  rentrer les noms que vous souhaitez afin de chercher dans la base de données")
+async def get_recherche(critere1 : str, nom1 : str,critere2 : str, nom2 : str):
+    with Session(ENGINE) as session:
+        
+        dic_critere = { "critere" : {"auteur": Ouvrage.auteur_ouvrage,"catégorie": Ouvrage.categorie_ouvrage,"langue":Ouvrage.langue_ouvrage,"mot clé":Ouvrage.mot_cle_ouvrage,"titre":Ouvrage.titre_ouvrage}}
+        
+        for cle1, valeur1 in dic_critere["critere"].items():
+            if cle1 == critere1:
+                print("1",valeur1)
+                for cle2, valeur2 in dic_critere["critere"].items():
+                    print("rentré dans le 2e for")
+                    if cle2 == critere2:
+                        print("2",valeur1,valeur2)
+                        ouvrage_db = (session.query(Ouvrage).filter(valeur1.contains(nom1)).filter(valeur2.contains(nom2))).all()
+                        return ouvrage_db
+                    break
+            break
+        if ouvrage_db:
+            return ouvrage_db
+    raise HTTPException(status_code=404, detail="Aucun ouvrage n'a pu être trouvé.")
