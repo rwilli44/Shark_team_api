@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Librairie Shark</title>
+    <script src="./assets/search.js" type="module"></script>
+  </head>
+  <body>
+    <h1>Librairie Shark</h1>
+    <h2>Chercher dans notre catelogue</h2>
+    <form action="">
+      <label for="search-category">Recherche par :</label>
+      <select id="search-category" name="search-category">
+        <option value="auteur">Auteur</option>
+        <option value="catégorie">Catégorie</option>
+        <option value="langue">Langue</option>
+        <option value="mot clé">Mot clé</option>
+        <option value="titre">Titre</option>
+      </select>
+      <input type="search-term" id="search-term" name="search-term" />
+      <button type="button" id="search-button">Chercher</button>
+    </form>
+    <div id="results"></div>
+  </body>
+</html>
