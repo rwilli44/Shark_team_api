@@ -22,6 +22,9 @@ nom_projet/
     |- requirements.txt
     |- .gitignore
     |- .env
+    |- index.html
+    |- assets/
+        |- search.js
     |- src/
         |- __init__.py
         |- main.py
@@ -52,6 +55,7 @@ nom_projet/
 - Les fichiers de documentation se trouvent dans le dossier `docs/`.
 - Les configurations serveur se trouvent dans le dossier `config/`.
 - Vos identifiants de connexion à la database doivent être rentrés dans le document `.env`.
+- Pour tester le front, lancer le front sur un serveur comme Go Live. Si la porte n'est pas 5500, pensez à la changer dans le variable origins dans le fichier main. Lancer également l'API avec uvicorn et vous devriez pouvoir chercher des livres dans la base de données.
 
 ## Installation
 
