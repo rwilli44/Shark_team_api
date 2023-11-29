@@ -1,4 +1,5 @@
-USE `test` 
+USE `test`;
+
 
 -- test.client definition
 
@@ -97,7 +98,7 @@ INSERT INTO test.client (nom_client,prenom_client,email_client,telephone_client,
 
 INSERT INTO test.ouvrage (titre_ouvrage,auteur_ouvrage,isbn_ouvrage,langue_ouvrage,prix_ouvrage,date_parution_ouvrage,categorie_ouvrage,date_disponibilite_libraire_ouvrage,date_disponibilite_particulier_ouvrage,image_ouvrage,table_des_matieres_ouvrage,mot_cle_ouvrage,description_ouvrage) VALUES
 	 ('Les Misérables','Victor Hugo','978-2070416020','français',25,'1862-03-15','Roman','2023-12-01','2023-12-15','url_de_l_image','Partie 1: Fantine','épopée, rédemption, misère','Les Misérables est un chef-d''œuvre de la littérature française qui suit les vies interconnectées de plusieurs personnages à travers les tumultes de la France du XIXe siècle.'),
-	 ('To Kill a Mockingbird','Harper Lee','978-0061120084','anglais',20,'1960-07-11','Fiction','2023-12-05','2023-12-20','url_de_l_image','Chapter 1: A Tired Old Town','racisme, justice, enfance','To Kill a Mockingbird aborde les thèmes du racisme et de l''injustice à travers les yeux de Scout Finch, une jeune fille du sud des États-Unis.'),
+	 ('To Kill a Mockingbird: Special 50th Anniversary Edition','Harper Lee','978-0061120085','anglais',20,'2020-07-11','Fiction','2023-12-15','2023-12-28','url_de_l_image','Chapter 1: A Tired Old Town','racisme, justice, enfance','To Kill a Mockingbird aborde les thèmes du racisme et de l''injustice à travers les yeux de Scout Finch, une jeune fille du sud des États-Unis.'),
 	 ('Pride and Prejudice','Jane Austen','978-1503290562','anglais',13,'1813-01-28','Romance','2023-12-10','2023-12-25','url_de_l_image','Volume 1: It is a truth universally acknowledged','amour, classe sociale, satire','Pride and Prejudice est une satire sociale qui explore les relations amoureuses au début du XIXe siècle en Angleterre.'),
 	 ('The Great Gatsby','F. Scott Fitzgerald','978-0743273565','anglais',15,'1925-04-10','Fiction','2023-12-15','2023-12-30','url_de_l_image','Chapter 1: In my younger and more vulnerable years','rébellion, illusion, richesse','The Great Gatsby offre un regard critique sur l''illusion de la richesse et de l''amour dans les années folles américaines.'),
 	 ('One Hundred Years of Solitude','Gabriel García Márquez','978-0061120084','espagnol',23,'1967-05-30','Magical Realism','2023-12-20','2024-01-05','url_de_l_image','Cien años de soledad','réalisme magique, génération, solitude','One Hundred Years of Solitude est un chef-d''œuvre du réalisme magique qui raconte l''histoire de la famille Buendía sur plusieurs générations.'),

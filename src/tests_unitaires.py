@@ -1,3 +1,6 @@
+# Standard library imports
+from datetime import date
+
 # Third party imports
 from fastapi.testclient import TestClient
 import unittest
@@ -136,7 +139,7 @@ class TestCommentaires(BaseTestFastAPI):
         )
         expected_response = {
             "id_commentaire": 10,
-            "date_publication_commentaire": "2023-11-28T00:00:00",
+            "date_publication_commentaire": str(date.today()) + "T00:00:00",
             "contenu_commentaire": "Updated Content",
             "titre_commentaire": "Updated Title",
             "id_client": 6,
@@ -188,17 +191,17 @@ class TestOuvrages(BaseTestFastAPI):
 
         excpected = {
             "id_ouvrage": 2,
-            "isbn_ouvrage": "978-0061120084",
+            "isbn_ouvrage": "978-0061120085",
             "prix_ouvrage": 20,
             "categorie_ouvrage": "Fiction",
-            "date_disponibilite_particulier_ouvrage": "2023-12-20",
+            "date_disponibilite_particulier_ouvrage": "2023-12-28",
             "table_des_matieres_ouvrage": "Chapter 1: A Tired Old Town",
             "description_ouvrage": "To Kill a Mockingbird aborde les thèmes du racisme et de l'injustice à travers les yeux de Scout Finch, une jeune fille du sud des États-Unis.",
-            "titre_ouvrage": "To Kill a Mockingbird",
+            "titre_ouvrage": "To Kill a Mockingbird: Special 50th Anniversary Edition",
             "auteur_ouvrage": "Harper Lee",
             "langue_ouvrage": "anglais",
-            "date_parution_ouvrage": "1960-07-11",
-            "date_disponibilite_libraire_ouvrage": "2023-12-05",
+            "date_parution_ouvrage": "2020-07-11",
+            "date_disponibilite_libraire_ouvrage": "2023-12-15",
             "image_ouvrage": "url_de_l_image",
             "mot_cle_ouvrage": "racisme, justice, enfance",
         }
@@ -301,7 +304,7 @@ class TestOuvrages(BaseTestFastAPI):
 
     def test_search_one_param(self):
         """Test pour retrouver un ouvrage par la recherche d'un paramètre: auteur, catégorie, langue, mot clé ou titre."""
-        response = self.client.get("/recherche_unitaire/auteur/ernaux")
+        response = self.client.get("/recherche_unitaire?critere=auteur&val=ernaux")
 
         excpected = [
             {
@@ -328,7 +331,9 @@ class TestOuvrages(BaseTestFastAPI):
 
     def test_search_two_params(self):
         """Test pour retrouver un ouvrage par la recherche de deux paramètres: auteur, catégorie, langue, mot clé ou titre."""
-        response = self.client.get("/recherche_double/auteur/co/titre/The")
+        response = self.client.get(
+            "/recherche_double?critere1=auteur&val1=co&critere2=titre&val2=The"
+        )
 
         excpected = [
             {
